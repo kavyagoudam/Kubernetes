@@ -66,4 +66,8 @@ Whenever a query is forwarded to pods it will search in “search” if not foun
 # How to login into DNS pods?
 Demo
 
+    kubectl -n kube-system get pods -o wide |grep core
+    kubectl get pods/<podname> -n kube-system -o=jsonpath="{range.items[*]}{.spec.containers[].name}";echo
+    kubectl -n kube-system debug -it <pod name> --image=busybox:1.28 --target=coredns
 
+![alt text](image.png)
