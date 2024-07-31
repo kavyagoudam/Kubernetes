@@ -12,6 +12,7 @@ What is CoreDNS?
     1. coredns - it will be managed by provider
     2. coredns-custom - this is available for user customization
 
+
 # How DNS works in Kubernetes?
 
     1. DNS is a built-in Kubernetes service launched automatically using the addon manager
@@ -71,3 +72,91 @@ Demo
     kubectl -n kube-system debug -it <pod name> --image=busybox:1.28 --target=coredns
 
 ![alt text](image.png)
+
+# Custom domain names using Kubernetes CoreDNS
+The objective of this demo is to use CoreDNS to provide custom domain names inside the cluster. We can replace the service named myapp.default.svc.cluster.local to something like mayapp.aks.com.
+
+    kubectl get pods,service,configmap -n kube-system -l=k8s-app=kube-dns
+    NAME                           READY   STATUS    RESTARTS   AGE
+    pod/coredns-846bdb68cd-59q7s   1/1     Running   0          19h
+    pod/coredns-846bdb68cd-csh2w   1/1     Running   0          19h
+
+    NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)         AGE
+    service/kube-dns   ClusterIP   10.0.0.10    <none>        53/UDP,53/TCP   20h
+
+    NAME                       DATA   AGE
+    configmap/coredns          1      20h
+    configmap/coredns-custom   1      20h
+
+CoreDNS configuration is saved into a configmap.
+
+    kubectl describe configmap coredns -n kube-system
+
+    ![alt text](image-1.png)
+
+To provide a custom confiuration, we can use the coredns-custom confgmap
+
+    kubectl describe configmap coredns-custom -n kube-system
+
+
+    ![alt text](image-2.png)
+
+
+Let us start by creating a demo app: a deployment and a service called nginx.
+
+    kubectl create deployment nginx --image=nginx --replicas=3
+    # deployment.apps/nginx created
+
+    kubectl expose deployment nginx --name nginx --port=80
+    # service/nginx exposed
+
+    kubectl get deploy,svc
+    # NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+    # deployment.apps/nginx   3/3     3            3           36s
+
+    # NAME                 TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+    # service/kubernetes   ClusterIP   10.0.0.1       <none>        443/TCP   7h30m
+    # service/nginx        ClusterIP   10.0.235.219   <none>        80/TCP    16s
+
+Now let us create and deploy a custom domain name resolvable inside kubernetes.
+    kubectl apply -f coredns-custom.yaml
+
+Let us try to resolve the service name from a test pod inside kubernetes.
+    kubectl exec -it nginx -- curl http://nginx
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+    html { color-scheme: light dark; }
+    body { width: 35em; margin: 0 auto;
+
+Let us try to resolve the service name from a test pod inside kubernetes.
+
+    kubectl exec -it nginx -- curl http://nginx.default.svc.cluster.local
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+
+Let us now try to resolve using the custom domain *.aks.com
+
+     kubectl exec -it nginx -- curl http://nginx.default.aks.com 
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Welcome to nginx!</title>
+    <style>
+    html { color-scheme: light dark; }
+    body { width: 35em; margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif; }
+    </style>
+
+
+TO-DO
+
+Note in the previous example, we should put the namespace name as a prefix to the domain name. Let us resolve the custom service name but without a namespace prefix.
+
+
+
