@@ -1,0 +1,41 @@
+# pre-requisites
+
+Here is the go to check list i recommend for your next kubernetes upgrade
+
+1. Backup etcd data - Just in case things go sideways
+
+2. Check the kubernetes version compatibility matrix
+
+3. Disable Swap - Make sure SWAP is off before you begin
+
+4. Drain Nodes - To prepare for the upgrade using 
+```command
+kubectl drain <node-to-drain> --ignore-daemonsets
+```
+
+5. Upgrade Control Plan - Start with API server, etcd and controller manager
+
+6. upgrade kubeadm - update the desired version using below command and then upgrade.
+```command
+sudo apt-mark unhold kubeadm
+```
+7. Upgrade kubelet and kubectl - update these after the control plane upgrade
+
+8. Uncordon nodes - Brings the nodes back online once they're upgraded using below command
+```command
+kubectl uncordon <node-to-uncord>
+```
+
+9.  Upgrade Worker Nodes - Do a rolling upgrade of your worker nodes
+
+10. Verify Cluster Status - Double-check that all nodes are ready and running smoothly('kubectl get nodes' should show all nodes as Ready)
+
+11. Monitor etcd upgrade - keep an eye on etcd; stop kube-apiserver temporarily if needed by sedning a SIGTERM signal('killall -s SIGTERM kube-apiserver')
+
+12. Switch Package repository - Move to the new package repository if you haven't already
+
+13. Upgrade CNI plugin
+
+14. Have a Rollback plan - Be ready to recover from a bad state using 'sudo kubeadm upgrade apply --force' if necessary
+
+15. clear Backup Files - which are left in '/etc/kubernetes/tmp' after the upgrade is complete
