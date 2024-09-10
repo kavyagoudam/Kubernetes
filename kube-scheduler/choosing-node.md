@@ -1,0 +1,1 @@
+https://blog.techiescamp.com/docs/kubernetes-scheduler-chooses-a-node/
