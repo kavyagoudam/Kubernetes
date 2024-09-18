@@ -17,3 +17,6 @@
  
 𝟑. 𝐒𝐞𝐜𝐮𝐫𝐢𝐭𝐲
  While developers secure the application from potential threats and hacks, Istio authorizes, authenticates, and encrypts all internal communication. Pods and services talk to each other and transfer data under Istio’s policies.
+
+
+ https://thenewstack.io/istio-1-23-drops-the-sidecars-for-a-simpler-ambient-mesh/
