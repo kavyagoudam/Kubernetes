@@ -21,6 +21,7 @@ What is CoreDNS?
     4. DNS queries may be expanded using the Pod’s /etc/resolv.conf. kubelet configures this file on each pod
     5. Kubernetes DNS add-ons currently support forward lookups (A records), port lookups (SRV records), reverse IP address (PTR records)
 
+![core-dnsflow](coredns-flow.png) 
 # How to deploy CoreDNS in kubernetes?
 
     1. CoreDNS is deployed in a simple way
