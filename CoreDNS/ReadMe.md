@@ -71,6 +71,7 @@ Demo
     kubectl get pods/<podname> -n kube-system -o=jsonpath="{range.items[*]}{.spec.containers[].name}";echo
     kubectl -n kube-system debug -it <pod name> --image=busybox:1.28 --target=coredns
 
+
 ![alt text](image.png)
 
 # Custom domain names using Kubernetes CoreDNS
@@ -92,14 +93,14 @@ CoreDNS configuration is saved into a configmap.
 
     kubectl describe configmap coredns -n kube-system
 
-    ![alt text](image-1.png)
+![alt text](image-1.png)
 
 To provide a custom confiuration, we can use the coredns-custom confgmap
 
     kubectl describe configmap coredns-custom -n kube-system
 
 
-    ![alt text](image-2.png)
+![alt text](image-2.png)
 
 
 Let us start by creating a demo app: a deployment and a service called nginx.
