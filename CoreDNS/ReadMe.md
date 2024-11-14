@@ -120,6 +120,7 @@ Let us start by creating a demo app: a deployment and a service called nginx.
     # service/nginx        ClusterIP   10.0.235.219   <none>        80/TCP    16s
 
 Now let us create and deploy a custom domain name resolvable inside kubernetes.
+    
     kubectl apply -f coredns-custom.yaml
 
 Let us try to resolve the service name from a test pod inside kubernetes.
