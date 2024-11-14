@@ -22,6 +22,11 @@ What is CoreDNS?
     5. Kubernetes DNS add-ons currently support forward lookups (A records), port lookups (SRV records), reverse IP address (PTR records)
 
 ![core-dnsflow](coredns-flow.png) 
+# pod dns configuration
+    can be seen below(it depends on the application and base image)
+
+    ![image](https://github.com/user-attachments/assets/2f4dd787-5a88-4aa8-b5ed-805837acac51)
+
 # How to deploy CoreDNS in kubernetes?
 
     1. CoreDNS is deployed in a simple way
